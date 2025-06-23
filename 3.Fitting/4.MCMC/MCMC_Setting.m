@@ -1,0 +1,18 @@
+CommandText=['MCMC.params = {'];
+for ii=3:FittingNumberOfMu
+    CommandText=[CommandText,'{''\mu_{',num2str(ii),'}'', IMODE_Results(',num2str(ii),'), 0, 0.95, IMODE_Results(',num2str(ii),'), sqrt(var(IMODE_search(:,',num2str(ii),'+1)))};'];
+end
+CommandText=[CommandText,'{''\tau'', IMODE_Results(end-1), 0, 1, IMODE_Results(end-1), sqrt(var(IMODE_search(:,end-1)))};'];
+CommandText=[CommandText,'{''\xi'', IMODE_Results(end), 0, 1, IMODE_Results(end), sqrt(var(IMODE_search(:,end)))}'];
+CommandText=[CommandText,'};'];
+eval(CommandText)
+
+model.ssfun = @(A,B) OBJ_MCMC_fit(A,B,DataTime,FittingTime,X0,FittingDividingPoint,Re0,kappa,alpha,gamma,f);
+
+options.nsimu = 1000000;
+options.burnintime = 0;
+options.updatesigma = 1;
+options.waitbar = 1;
+
+Info.xdata = DataTime;
+Info.ydata = DataCase;

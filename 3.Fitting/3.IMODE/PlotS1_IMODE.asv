@@ -1,0 +1,39 @@
+figure(502)
+set(gcf,"Name","[IMODE] Fitting result, setting the initial valule for bayesian inference",'Units','Centimeter','Position',[0,0,25,20])
+clf
+tiledlayout(5,8,'Padding','compact','TileSpacing','compact')
+
+nexttile(1,[2,8])
+
+[~,X_IMODEfit] = ode45(@ODE_fit,FittingTime,[X0,0,0,0],[],IMODE_Results,FittingDividingPoint,Re0,kappa,alpha,gamma,f);
+
+
+% plot(DataCountires{i}.ydata(:,1),[DataCountires{i}.ydata(1,2);diff(DataCountires{i}.ydata(:,2))])
+% plot(DataCountires{i}.ydata(:,1),alpha*ODE_result{i}(:,3))
+% title(NameList(i))
+hold on
+plot(DataTime,DataCase,'ro','MarkerSize',5)
+plot(FittingTime,X_IMODEfit(:,end),'k-','LineWidth',1)
+title(CountryName)
+xlim([FittingTime(1),FittingTime(end)])
+XTick = FittingDividingPoint; XTickLabel = datestr(XTick,'dd mmm, yyyy');
+set(gca,'XTick',XTick,'XTickLabel',XTickLabel)
+
+
+nexttile(17,[3,7])
+hold on
+
+[~,MinIndexIMODE] = min(IMODE_search(:,1));
+EvalX = [''];
+for i=1:length(IMODE_search(:,2:end))
+    EvalX = [EvalX,num2str(i),'",'];
+boxplot(["1","2"]IMODE_search(:,2:end))
+hold on
+plot(linspace(4,95,length(IMODE_search(MinIndexIMODE,2:end))),IMODE_search(MinIndexIMODE,2:end),'ro','MarkerSize',10,'MarkerFaceColor','r')
+
+
+
+nexttile(24,[3,1])
+hold on
+boxplot(IMODE_search(:,1))
+ylabel("Objectives")

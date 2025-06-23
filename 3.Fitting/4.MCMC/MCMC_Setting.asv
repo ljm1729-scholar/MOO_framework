@@ -1,0 +1,30 @@
+CommandText=['MCMC.params = {'];
+for ii=3:FittingNumberOfMu
+    CommandText=[CommandText,'{''\mu_{',num2str(ii),'}'', IMODE_Results(',num2str(ii),'), 0, 0.95, IMODE_Results(',num2str(ii),'), sqrt(var(IMODE_search(:,',num2str(ii)+1,')))};'];
+end
+CommandText=[CommandText,'{''\tau'', IMODE_Results(end-1), 0, 1, IMODE_Results(end-1), sqrt(var(IMODE_search(:,end-1)))};'];
+CommandText=[CommandText,'{''\xi'', IMODE_Results(end), 0, 1, IMODE_Results(end), sqrt(var(IMODE_search(:,end)))}'];
+CommandText=[CommandText,'};'];
+eval(CommandText)
+
+%MCMC_fun = @(A,B) BiobjectiveCOVIDEarlyMCMC_Fit(A,B,time,X0,div_date,beta,kappa,gamma,f);
+model.ssfun = @(A,B) OBJ_MCMC_fit(A,B,DataTime,FittingTime,X0,FittingDividingPoint,Re0,kappa,alpha,gamma,f);
+%model.sigma2 = mse;
+
+options.nsimu = 1000000;
+options.burnintime = 0;
+options.updatesigma = 1;
+options.waitbar = 1;
+
+Info.xdata = DataTime;
+Info.ydata = DataCase;
+
+MCMC.params = {{'\mu_{3}', IMODE_Results(3), 0, 0.95, IMODE_Results(3), sqrt(var(IMODE_search(:,4)))};
+    {'\mu_{4}', IMODE_Results(4), 0, 0.95, IMODE_Results(4), sqrt(var(IMODE_search(:,5)))};
+    {'\mu_{5}', IMODE_Results(5), 0, 0.95, IMODE_Results(5), sqrt(var(IMODE_search(:,6)))};
+    {'\mu_{6}', IMODE_Results(6), 0, 0.95, IMODE_Results(6), sqrt(var(IMODE_search(:,7)))};
+    {'\mu_{7}', IMODE_Results(7), 0, 0.95, IMODE_Results(7), sqrt(var(IMODE_search(:,8)))};
+    {'\mu_{8}', IMODE_Results(8), 0, 0.95, IMODE_Results(8), sqrt(var(IMODE_search(:,9)))};
+    {'\mu_{9}', IMODE_Results(9), 0, 0.95, IMODE_Results(9), sqrt(var(IMODE_search(:,:)))};
+    {'\mu_{10}', IMODE_Results(10), 0, 0.95, IMODE_Results(10), sqrt(var(IMODE_search(:,21)))};
+    {'\mu_{11}', IMODE_Results(11), 0, 0.95, IMODE_Results(11), sqrt(var(IMODE_search(:,22)))};{'\mu_{12}', IMODE_Results(12), 0, 0.95, IMODE_Results(12), sqrt(var(IMODE_search(:,23)))};{'\mu_{13}', IMODE_Results(13), 0, 0.95, IMODE_Results(13), sqrt(var(IMODE_search(:,24)))};{'\mu_{14}', IMODE_Results(14), 0, 0.95, IMODE_Results(14), sqrt(var(IMODE_search(:,25)))};{'\mu_{15}', IMODE_Results(15), 0, 0.95, IMODE_Results(15), sqrt(var(IMODE_search(:,26)))};{'\tau', IMODE_Results(end-1), 0, 1, IMODE_Results(end-1), sqrt(var(IMODE_search(:,end-1)))};{'\xi', IMODE_Results(end), 0, 1, IMODE_Results(end), sqrt(var(IMODE_search(:,end)))}}

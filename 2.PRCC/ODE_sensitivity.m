@@ -1,0 +1,24 @@
+function dy = ODE_sensitivity(t,y,xi,R_0,mu,kappa,alpha,tau,gamma,f)
+
+% changing NPIs
+%mu = mu_in( sum( change(1:end-1)<=t ) );
+
+% assign the initial value to the compartments
+S=y(1); E=y(2); I=y(3); Q=y(4); R=y(5); D=y(6); result1 = y(7); result2=y(8); reseult3=y(9);
+
+N=sum(y([1 2 3 5])); % S, E, I, R
+
+% ode
+dS = -(1-mu)*R_0*alpha/(1-tau)*S*I/N;
+dE = +(1-mu)*R_0*alpha/(1-tau)*S*I/N -kappa*E +xi;
+dI = +kappa*E -alpha/(1-tau)*I;
+dQ = +alpha/(1-tau)*I -gamma*Q;
+dR = +(1-f)*gamma*Q;
+dD = +f*gamma*Q;
+dresult1 = (1-mu)*R_0*alpha/(1-tau)*S*I/N;
+dresult2 = kappa*E;
+dresult3 = alpha/(1-tau)*I;
+
+dy = [ 
+       dS; dE; dI; dQ; dR; dD; dresult1; dresult2; dresult3;
+     ];

@@ -1,0 +1,22 @@
+function LL = OBJ_MCMC_fit(para_estim,ObjData,time,X0,div_date,beta,kappa,gamma,f)
+
+[~,X] = ode45(@ODE_fit,time,X0,[],para_estim,div_date,beta,kappa,gamma,f);
+
+n_inf  = [ObjData(1),diff(ObjData)];
+index_inf0 = n_inf==0;
+
+S_end = X(end,1);
+
+mulist = [0,0,para_estim(1:end-2)];
+mu = interp1(0:14:154,mulist,0:1:154);
+I = X(:,3);
+N = sum(X(:,[1,2,3,5]),2);
+lambda = (1-mu')*beta.*I./N;
+
+Lambda = cumsum(lambda);
+
+
+
+LL = -2*(n_inf*log(1-exp(-lambda))...
+    +S_end*(-Lambda(end))...
+    +n_inf*(-Lambda) );

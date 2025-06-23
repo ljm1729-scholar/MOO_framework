@@ -1,0 +1,115 @@
+figure(4)
+clf
+set(gcf,"Name","Multi-objective optimization results",'Units','centimeters','Position',[0,0,25,8])
+tiledlayout(6,5,'Padding','compact','TileSpacing','compact');
+
+idx = [];
+for i = 1:8
+    [~,idx(i)] = min(abs(MultiObjResult.fval(:,1)-i/10));
+end
+MultiObjEx = [zeros(8,2),MultiObjResult.x(idx,:)];
+
+idxx = [];
+for i = 1:5
+    [~,idxx(i)] = min(abs(10.^MultiObjResult.fval(:,2)/Pop-10^(-i)));
+end
+MultiObjExx = [zeros(5,2),MultiObjResult.x(idxx,:)];
+
+
+nexttile(1,[6,2])
+
+hold on
+plot(MultiObjResult.fval(:,1),10.^MultiObjResult.fval(:,2)/Pop,'k-','LineWidth',1.5);
+if FittingNumberOfMu >= SimulNumberOfMu 
+    DataMultiObj = obj(MCMC_Results(1:SimulNumberOfMu-2));
+    plot(DataMultiObj(1),10.^DataMultiObj(2)/Pop,'rd','MarkerSize',7,'MarkerFaceColor','r','LineWidth',1,'MarkerEdgeColor','k')
+end
+plot(-1,-1,'o','MarkerSize',8,'MarkerFaceColor','none','MarkerEdgeColor','k','LineWidth',1);
+
+% for i=1:8
+%     plot(MultiObjResult.fval(idx(i),1),10.^MultiObjResult.fval(idx(i),2)/Info.Data.Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(i,:),'MarkerEdgeColor','k','LineWIdth',1);
+% end
+
+% p1 = plot(MultiObjResult.fval(idx(1),1),10.^MultiObjResult.fval(idx(1),2)/Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(1,:),'MarkerEdgeColor','k','LineWIdth',1);
+% p2 = plot(MultiObjResult.fval(idx(2),1),10.^MultiObjResult.fval(idx(2),2)/Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(2,:),'MarkerEdgeColor','k','LineWIdth',1);
+% p3 = plot(MultiObjResult.fval(idx(3),1),10.^MultiObjResult.fval(idx(3),2)/Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(3,:),'MarkerEdgeColor','k','LineWIdth',1);
+% p4 = plot(MultiObjResult.fval(idx(4),1),10.^MultiObjResult.fval(idx(4),2)/Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(4,:),'MarkerEdgeColor','k','LineWIdth',1);
+% p5 = plot(MultiObjResult.fval(idx(5),1),10.^MultiObjResult.fval(idx(5),2)/Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(5,:),'MarkerEdgeColor','k','LineWIdth',1);
+% p6 = plot(MultiObjResult.fval(idx(6),1),10.^MultiObjResult.fval(idx(6),2)/Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(6,:),'MarkerEdgeColor','k','LineWIdth',1);
+% p7 = plot(MultiObjResult.fval(idx(7),1),10.^MultiObjResult.fval(idx(7),2)/Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(7,:),'MarkerEdgeColor','k','LineWIdth',1);
+% p8 = plot(MultiObjResult.fval(idx(8),1),10.^MultiObjResult.fval(idx(8),2)/Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(8,:),'MarkerEdgeColor','k','LineWIdth',1);
+
+plot(MultiObjResult.fval(idxx(1),1),10.^MultiObjResult.fval(idxx(1),2)/Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(1,:),'MarkerEdgeColor','k','LineWIdth',1);
+plot(MultiObjResult.fval(idxx(2),1),10.^MultiObjResult.fval(idxx(2),2)/Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(2,:),'MarkerEdgeColor','k','LineWIdth',1);
+plot(MultiObjResult.fval(idxx(3),1),10.^MultiObjResult.fval(idxx(3),2)/Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(3,:),'MarkerEdgeColor','k','LineWIdth',1);
+plot(MultiObjResult.fval(idxx(4),1),10.^MultiObjResult.fval(idxx(4),2)/Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(4,:),'MarkerEdgeColor','k','LineWIdth',1);
+plot(MultiObjResult.fval(idxx(5),1),10.^MultiObjResult.fval(idxx(5),2)/Pop,'o','MarkerSize',8,'MarkerFaceColor',FigInfo.MultiObjColor(5,:),'MarkerEdgeColor','k','LineWIdth',1);
+
+
+xlim([min(MultiObjResult.fval(:,1)),max(MultiObjResult.fval(:,1))])
+xlabel('$f_1(\mu(t))$','Interpreter','latex')
+ylim([1.0e-7,1])
+ylabel('Proportion of the population')
+
+
+set(gca,'TickLabelInterpreter','tex',...
+    'XTick',[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8],'XTickLabel',{'0.1';'0.2';'0.3';'0.4';'0.5';'0.6';'0.7';'0.8'},...
+    'YTick',[1.0e-6,1.0e-5,1.0e-4,1.0e-3,1.0e-2,1.0e-1,1.0e-0],'YTickLabel',{'10^{-6}';'10^{-5}';'10^{-4}';'10^{-3}';'10^{-2}';'10^{-1}';'1'},...
+    'YScale','log',...
+    'FontSize',12,'FontName','Times','TickDir','out')
+
+
+legend("Pareto curve","Estimated result","Pareto solutions",'FontSize',10,'Location','best'); %,'Pareto optimal NPIs strategy'
+
+
+for i=1:5
+    nexttile(5*i -2,[1,3])
+    hold on
+    plot(1:SimulNumberOfMu,MultiObjExx(i,:),'LineWidth',2,'Color',FigInfo.MultiObjColor(i,:))
+    xlim([1 SimulNumberOfMu])
+    ylim([0,1])
+    set(gca,'TickLabelInterpreter','tex',...
+    'YTick',[0,1],'YTickLabel',[],...
+    'XTick',1:SimulNumberOfMu,'XTickLabel',[],...
+    'FontSize',8,'FontName','Times','YGrid','on')
+end
+
+nexttile(5*6 -2,[1,3])
+hold on
+plot(1:FittingNumberOfMu,[0,0,MCMC_Results(1:end-2)],'LineWidth',2,'Color','r')
+xlim([1 SimulNumberOfMu])
+ylim([0,1])
+set(gca,'TickLabelInterpreter','tex',...
+'YTick',[0,1],'YTickLabel',["0","1"],...
+'XTick',1:SimulNumberOfMu,'XTickLabel',[],...
+'XTickLabelRotation',90,...
+'FontSize',4,'FontName','Times','YGrid','on')
+
+
+
+XTickLabel_Multiobj = [" "]; XTickLabel_Multiobj(SimulNumberOfMu) = [" "]; 
+for i=1:SimulNumberOfMu
+    XTickLabel_Multiobj(i) = [num2str((i-2)*2),'w'];
+end
+XTickLabel_Multiobj(2) = ["Idx"];
+
+xlabel('Time from the index case')
+set(gca,'TickLabelInterpreter','tex',...
+    'YTick',0:1,'YTickLabel',[],...
+    'XTick',1:SimulNumberOfMu,'XTickLabel',XTickLabel_Multiobj,...
+    'FontSize',12,'FontName','Times','YGrid','on')
+nexttile(3,[1,3])
+
+
+Filename_MultiObj = ['Results/Figures/MultiObj/Figure4a_',char(CountryName),'.png'];
+exportgraphics(figure(4),Filename_MultiObj,'Resolution',600)
+Filename_MultiObj = ['Results/Figures/MultiObj/Figure4a_',char(CountryName),'.eps'];
+exportgraphics(figure(4),Filename_MultiObj,'Resolution',600)
+Filename_MultiObj = ['Results/Figures/MultiObj/Figure4a_',char(CountryName),'.pdf'];
+exportgraphics(figure(4),Filename_MultiObj,'Resolution',600)
+Filename_MultiObj = ['Results/Figures/MultiObj/Figure4a_',char(CountryName),'.jpg'];
+exportgraphics(figure(4),Filename_MultiObj,'Resolution',600)
+
+%% Record time
+% Time record 5-: Multi-objective optimization - finding Pareto solution
+timestone = RecordTime("Multi-objective optimization",timestone);

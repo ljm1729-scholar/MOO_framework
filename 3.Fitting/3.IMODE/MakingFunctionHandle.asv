@@ -1,0 +1,2 @@
+ObjIMODE=@(x) OBJ_fit(x,DataCase,time,X0,div_date,beta,kappa,alpha,gamma,f);
+
