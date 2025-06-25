@@ -1,6 +1,6 @@
 %%
 BigChangeIndextrim=BigChangeIndex;
-BigChangeIndextrim([4])=[]
+BigChangeIndextrim([2,4,5,6,7,8,9])=[]
 figure(6)
 set(gcf,"Name","CBA results for CpI",'Units','centimeters','Position',[0,0,25,8])
 clf

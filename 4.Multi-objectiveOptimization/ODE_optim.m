@@ -10,16 +10,16 @@ mu = interp1(div_date,mu_input,t);
 S=X0(1); E=X0(2); I=X0(3); Q=X0(4); R=X0(5); D=X0(6); fit1=X0(7); fit2=X0(8); fit3=X0(9);
 N=sum(X0) -Q -fit1 -fit2 -fit3;
 
-dS = -(1-mu)*Re0*alpha/tau*S*I/N;
-dE = +(1-mu)*Re0*alpha/tau*S*I/N -kappa*E +xi;
-dI = +kappa*E -alpha/tau*I;
-dQ = +alpha/tau*I -gamma*Q;
+dS = -(1-mu)*Re0*alpha/(1-tau)*S*I/N;
+dE = +(1-mu)*Re0*alpha/(1-tau)*S*I/N -kappa*E +xi;
+dI = +kappa*E -alpha/(1-tau)*I;
+dQ = +alpha/(1-tau)*I -gamma*Q;
 dR = (1-f)*gamma*Q;
 dD = (f)*gamma*Q;
 
-dfit1 = (1-mu)*Re0*alpha/tau*S*I/N; % cumulative infected
+dfit1 = (1-mu)*Re0*alpha/(1-tau)*S*I/N; % cumulative infected
 dfit2 = f*gamma*Q; % cumulative death
-dfit3 = alpha/tau*I; % cumulative confirmed
+dfit3 = alpha/(1-tau)*I; % cumulative confirmed
 
 X = [
     dS;
