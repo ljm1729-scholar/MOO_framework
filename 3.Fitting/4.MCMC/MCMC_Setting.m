@@ -9,7 +9,7 @@ eval(CommandText)
 
 model.ssfun = @(A,B) OBJ_MCMC_fit(A,B,DataTime,FittingTime,X0,FittingDividingPoint,Re0,kappa,alpha,gamma,f);
 
-options.nsimu = 1000000;
+options.nsimu = 500000;
 options.burnintime = 0;
 options.updatesigma = 1;
 options.waitbar = 1;
